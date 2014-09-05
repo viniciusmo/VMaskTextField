@@ -1,0 +1,20 @@
+PODS:
+  - FBSnapshotTestCase (1.1)
+  - Kiwi (2.3.0)
+  - VMaskTextField (0.1.0)
+
+DEPENDENCIES:
+  - FBSnapshotTestCase
+  - Kiwi
+  - VMaskTextField (from `../`)
+
+EXTERNAL SOURCES:
+  VMaskTextField:
+    :path: ../
+
+SPEC CHECKSUMS:
+  FBSnapshotTestCase: 9053afee1d66b4c7c313fcb0ae582a5e47bea9d0
+  Kiwi: 54bece5b35564d9b8e03c608d926f1a22fcfc589
+  VMaskTextField: 3579132d64fccf3df08eb27d2c36f73fa0ae28c5
+
+COCOAPODS: 0.33.1
