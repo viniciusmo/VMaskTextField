@@ -1,0 +1,10 @@
+target 'VMaskTextField', :exclusive => true do
+  pod "VMaskTextField", :path => "../"
+end
+
+target 'Tests', :exclusive => true do
+  pod "VMaskTextField", :path => "../"
+
+  pod 'Kiwi'
+  pod 'FBSnapshotTestCase'
+end
