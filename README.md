@@ -6,7 +6,7 @@
 [![Platform](https://img.shields.io/cocoapods/p/VMaskTextField.svg?style=flat)](http://cocoadocs.org/docsets/VMaskTextField)
 
 
-An inputmask helps the user with the input by ensuring a predefined format. This can be useful for dates, numerics, phone numbers, ...\\\
+An inputmask helps the user with the input by ensuring a predefined format. This can be useful for dates, numerics, phone numbers  etc
 
 
 ## Usage
