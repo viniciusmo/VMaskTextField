@@ -4,7 +4,11 @@
 [![Version](https://img.shields.io/cocoapods/v/VMaskTextField.svg?style=flat)](http://cocoadocs.org/docsets/VMaskTextField)
 [![License](https://img.shields.io/cocoapods/l/VMaskTextField.svg?style=flat)](http://cocoadocs.org/docsets/VMaskTextField)
 [![Platform](https://img.shields.io/cocoapods/p/VMaskTextField.svg?style=flat)](http://cocoadocs.org/docsets/VMaskTextField)
+
+
 An inputmask helps the user with the input by ensuring a predefined format. This can be useful for dates, numerics, phone numbers, ...\\\
+
+
 ## Usage
 
 To run the example project, clone the repo, and run `pod install` from the Example directory first.
