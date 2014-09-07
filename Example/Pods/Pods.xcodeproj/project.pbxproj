@@ -71,8 +71,9 @@
 		49402F8A1942428FB8FDD15F /* KWHaveValueMatcher.h in Headers */ = {isa = PBXBuildFile; fileRef = C787276A8355432289E47C5F /* KWHaveValueMatcher.h */; };
 		49BCD734AE3F44F780D23818 /* KWStub.h in Headers */ = {isa = PBXBuildFile; fileRef = 103A82FF5354472D812DC46D /* KWStub.h */; };
 		4A822A72FEDF4656A9F3D64E /* KWItNode.h in Headers */ = {isa = PBXBuildFile; fileRef = CC62AC9877574103BF0382B3 /* KWItNode.h */; };
-		4C836B9119BBF9020061DD58 /* VMaskTextField.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C836B9019BBF9020061DD58 /* VMaskTextField.h */; };
-		4C836B9319BBF9090061DD58 /* VMaskTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C836B9219BBF9090061DD58 /* VMaskTextField.m */; };
+		4C836B9B19BBFA590061DD58 /* .gitkeep in Resources */ = {isa = PBXBuildFile; fileRef = 4C836B9619BBFA590061DD58 /* .gitkeep */; };
+		4C836B9C19BBFA590061DD58 /* .gitkeep in Resources */ = {isa = PBXBuildFile; fileRef = 4C836B9819BBFA590061DD58 /* .gitkeep */; };
+		4C836B9D19BBFA590061DD58 /* VMaskTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C836B9A19BBFA590061DD58 /* VMaskTextField.m */; };
 		4D2948E86C2B42A6BBF72B92 /* KWCallSite.m in Sources */ = {isa = PBXBuildFile; fileRef = B42D7BC1DC914C1A9148B13E /* KWCallSite.m */; settings = {COMPILER_FLAGS = "-fobjc-arc -DOS_OBJECT_USE_OBJC=0"; }; };
 		4D432858A6764143946E6154 /* KWGenericMatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 285F2D798A0F41C6B32B5593 /* KWGenericMatcher.m */; settings = {COMPILER_FLAGS = "-fobjc-arc -DOS_OBJECT_USE_OBJC=0"; }; };
 		4EB4FEF626304EA0B9284D58 /* NSObject+KiwiMockAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 38C0A49826984F1DB96A92C8 /* NSObject+KiwiMockAdditions.m */; settings = {COMPILER_FLAGS = "-fobjc-arc -DOS_OBJECT_USE_OBJC=0"; }; };
@@ -341,8 +342,10 @@
 		4A286358E9FC448588FE40C0 /* Pods-Tests-FBSnapshotTestCase.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Tests-FBSnapshotTestCase.xcconfig"; sourceTree = "<group>"; };
 		4B493B799C2048EB9FE2C07A /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.1.sdk/System/Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		4C5FED6C3F114D1FBE23A901 /* KWMessageSpying.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = KWMessageSpying.h; path = Classes/Core/KWMessageSpying.h; sourceTree = "<group>"; };
-		4C836B9019BBF9020061DD58 /* VMaskTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VMaskTextField.h; sourceTree = "<group>"; };
-		4C836B9219BBF9090061DD58 /* VMaskTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VMaskTextField.m; sourceTree = "<group>"; };
+		4C836B9619BBFA590061DD58 /* .gitkeep */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitkeep; sourceTree = "<group>"; };
+		4C836B9819BBFA590061DD58 /* .gitkeep */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitkeep; sourceTree = "<group>"; };
+		4C836B9919BBFA590061DD58 /* VMaskTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VMaskTextField.h; sourceTree = "<group>"; };
+		4C836B9A19BBFA590061DD58 /* VMaskTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VMaskTextField.m; sourceTree = "<group>"; };
 		4EA23D3E55AC4C738AE6FC84 /* KWIntercept.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = KWIntercept.m; path = Classes/Stubbing/KWIntercept.m; sourceTree = "<group>"; };
 		4ED1D3C8806A4FBB95FBE421 /* KWEqualMatcher.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = KWEqualMatcher.m; path = Classes/Matchers/KWEqualMatcher.m; sourceTree = "<group>"; };
 		4F1701AAD1F4475EAF527BC3 /* Pods-Tests-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-Tests-dummy.m"; sourceTree = "<group>"; };
@@ -800,6 +803,33 @@
 			path = FBSnapshotTestCase;
 			sourceTree = "<group>";
 		};
+		4C836B9419BBFA590061DD58 /* Pod */ = {
+			isa = PBXGroup;
+			children = (
+				4C836B9519BBFA590061DD58 /* Assets */,
+				4C836B9719BBFA590061DD58 /* Classes */,
+			);
+			path = Pod;
+			sourceTree = "<group>";
+		};
+		4C836B9519BBFA590061DD58 /* Assets */ = {
+			isa = PBXGroup;
+			children = (
+				4C836B9619BBFA590061DD58 /* .gitkeep */,
+			);
+			path = Assets;
+			sourceTree = "<group>";
+		};
+		4C836B9719BBFA590061DD58 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				4C836B9819BBFA590061DD58 /* .gitkeep */,
+				4C836B9919BBFA590061DD58 /* VMaskTextField.h */,
+				4C836B9A19BBFA590061DD58 /* VMaskTextField.m */,
+			);
+			path = Classes;
+			sourceTree = "<group>";
+		};
 		4EC57BFF74C8413C82021547 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -861,8 +891,7 @@
 		DDA5E349DCF24A87A7F784A1 /* VMaskTextField */ = {
 			isa = PBXGroup;
 			children = (
-				4C836B9219BBF9090061DD58 /* VMaskTextField.m */,
-				4C836B9019BBF9020061DD58 /* VMaskTextField.h */,
+				4C836B9419BBFA590061DD58 /* Pod */,
 				120CB80CD2B14D75971CE7B7 /* Support Files */,
 			);
 			name = VMaskTextField;
@@ -1009,7 +1038,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4C836B9119BBF9020061DD58 /* VMaskTextField.h in Headers */,
 				A937207858CF442797949D2A /* FBSnapshotTestCase.h in Headers */,
 				3989E4A3676E443DA28EB312 /* FBSnapshotTestController.h in Headers */,
 				444A11CA74C1495DB440BD6A /* UIImage+Compare.h in Headers */,
@@ -1177,6 +1205,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C836B9B19BBFA590061DD58 /* .gitkeep in Resources */,
+				4C836B9C19BBFA590061DD58 /* .gitkeep in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1187,6 +1217,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C836B9D19BBFA590061DD58 /* VMaskTextField.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1300,7 +1331,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4C836B9319BBF9090061DD58 /* VMaskTextField.m in Sources */,
 				50FBAF523A1A4E9DB2F5B492 /* FBSnapshotTestCase.m in Sources */,
 				E7978F5A9EEB4D35B073421A /* FBSnapshotTestController.m in Sources */,
 				823ECA939AD24A048CBF76C3 /* Pods-Tests-FBSnapshotTestCase-dummy.m in Sources */,
