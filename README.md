@@ -10,7 +10,7 @@ An inputmask helps the user with the input by ensuring a predefined format. This
 
 
 ## Usage
-
+```objective-c
     @interface VViewController ()
 	
 	@property (weak,nonatomic) IBOutlet VMaskTextField * maskTextField;
@@ -32,7 +32,7 @@ An inputmask helps the user with the input by ensuring a predefined format. This
 
 
 
-
+```
 ## Features
 
 ## Installation
