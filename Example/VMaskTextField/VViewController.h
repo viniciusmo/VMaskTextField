@@ -7,7 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "VMaskTextField.h"
 
-@interface VViewController : UIViewController
+@interface VViewController : UIViewController<UITextFieldDelegate>
+
 
 @end

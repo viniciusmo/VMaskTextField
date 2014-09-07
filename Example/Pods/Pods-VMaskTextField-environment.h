@@ -9,6 +9,6 @@
 // VMaskTextField
 #define COCOAPODS_POD_AVAILABLE_VMaskTextField
 #define COCOAPODS_VERSION_MAJOR_VMaskTextField 0
-#define COCOAPODS_VERSION_MINOR_VMaskTextField 1
-#define COCOAPODS_VERSION_PATCH_VMaskTextField 0
+#define COCOAPODS_VERSION_MINOR_VMaskTextField 0
+#define COCOAPODS_VERSION_PATCH_VMaskTextField 1
 

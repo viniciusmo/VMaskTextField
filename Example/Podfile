@@ -1,5 +1,5 @@
 target 'VMaskTextField', :exclusive => true do
-  pod "VMaskTextField", :path => "../"
+  pod "VMaskTextField"
 end
 
 target 'Tests', :exclusive => true do

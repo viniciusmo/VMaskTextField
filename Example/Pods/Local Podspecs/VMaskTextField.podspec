@@ -1,29 +1,16 @@
-#
-# Be sure to run `pod lib lint VMaskTextField.podspec' to ensure this is a
-# valid spec and remove all comments before submitting the spec.
-#
-# Any lines starting with a # are optional, but encouraged
-#
-# To learn more about a Podspec see http://guides.cocoapods.org/syntax/podspec.html
-#
-
 Pod::Spec.new do |s|
   s.name             = "VMaskTextField"
-  s.version          = "0.1.0"
-  s.summary          = "A short description of VMaskTextField."
+  s.version          = "0.0.1"
+  s.summary          = "VMaskTextField is a library which create an input mask."
   s.description      = <<-DESC
-                       An optional longer description of VMaskTextField
-
-                       * Markdown format.
-                       * Don't worry about the indent, we strip it!
+                       An inputmask helps the user with the input by ensuring a predefined format. This can be useful for dates, numerics, phone numbers etc
                        DESC
-  s.homepage         = "https://github.com/<GITHUB_USERNAME>/VMaskTextField"
+  s.homepage         = "https://github.com/viniciusmo/VMaskTextField"
   # s.screenshots     = "www.example.com/screenshots_1", "www.example.com/screenshots_2"
   s.license          = 'MIT'
   s.author           = { "viniciusmo" => "vinicius.moises.oliveira@gmail.com" }
-  s.source           = { :git => "https://github.com/<GITHUB_USERNAME>/VMaskTextField.git", :tag => s.version.to_s }
-  # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
-
+  s.source           = { :git => "https://github.com/viniciusmo/VMaskTextField.git", :tag => s.version.to_s }
+  s.social_media_url = 'https://twitter.com/viniciusmo90'
   s.platform     = :ios, '7.0'
   s.requires_arc = true
 

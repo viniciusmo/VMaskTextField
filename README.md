@@ -11,7 +11,27 @@ An inputmask helps the user with the input by ensuring a predefined format. This
 
 ## Usage
 
-To run the example project, clone the repo, and run `pod install` from the Example directory first.
+    @interface VViewController ()
+	
+	@property (weak,nonatomic) IBOutlet VMaskTextField * maskTextField;
+	
+	@end
+	
+	@implementation VViewController
+	
+	- (void)viewDidLoad{
+	    //Telephone with Code Area
+	    self.maskTextField.mask = @"(##) ####-####";
+	    self.maskTextField.delegate = self;
+	}
+	
+	- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
+	   return  [_maskTextField shouldChangeCharactersInRange:range replacementString:string];
+	}
+
+
+
+
 
 ## Features
 
