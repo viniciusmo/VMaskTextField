@@ -34,6 +34,10 @@ An inputmask helps the user with the input by ensuring a predefined format. This
 ```
 ## Features
 
+ - Validating  data type
+ - Flexible masks
+ - Automatic maxlength
+ 
 ## Installation
 
 VMaskTextField is available through [CocoaPods](http://cocoapods.org). To install
