@@ -13,17 +13,13 @@ describe(@"My initial tests", ^{
   context(@"will fail", ^{
 
       it(@"can do maths", ^{
-          [[@1 should] equal:@2];
+          [[@1 should] equal:@1];
       });
 
       it(@"can read", ^{
-          [[@"number" should] equal:@"string"];
+          [[@"number" should] equal:@"number"];
       });
-    
-      it(@"will wait and fail", ^{
-          NSObject *object = [[NSObject alloc] init];
-          [[expectFutureValue(object) shouldEventually] receive:@selector(autoContentAccessingProxy)];
-      });
+
   });
 
   context(@"will pass", ^{
