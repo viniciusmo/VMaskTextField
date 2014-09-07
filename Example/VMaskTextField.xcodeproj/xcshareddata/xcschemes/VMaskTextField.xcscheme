@@ -37,6 +37,11 @@
                BlueprintName = "Tests"
                ReferencedContainer = "container:VMaskTextField.xcodeproj">
             </BuildableReference>
+            <SkippedTests>
+               <Test
+                  Identifier = "InitialTests/MyInitialTests_WillFail_CanDoMaths">
+               </Test>
+            </SkippedTests>
          </TestableReference>
       </Testables>
       <MacroExpansion>
