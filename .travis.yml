@@ -1,8 +1,5 @@
 # reference: http://www.objc.io/issue-6/travis-ci.html
 
 language: objective-c
-before_install:
-  - brew update
-  - brew upgrade xctool
 script:
-- xctool test -workspace Example/VMaskTextField.xcworkspace -scheme VMaskTextField -sdk iphonesimulator ONLY_ACTIVE_ARCH=YES
+- xctool test -workspace Example/VMaskTextField.xcworkspace -scheme VMaskTextField -sdk iphonesimulator ONLY_ACTIVE_ARCH=NO
