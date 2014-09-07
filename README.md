@@ -8,7 +8,7 @@
 
 An inputmask helps the user with the input by ensuring a predefined format. This can be useful for dates, numerics, phone numbers  etc
 
-![demo](https://raw.githubusercontent.com/viniciusmo/VMaskTextField/master/Resources/vmasktextfield.gif)
+->![demo](https://raw.githubusercontent.com/viniciusmo/VMaskTextField/master/Resources/vmasktextfield.gif)<-
 
 ## Usage
 ```objective-c
