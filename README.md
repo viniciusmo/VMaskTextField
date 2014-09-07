@@ -37,13 +37,16 @@ An inputmask helps the user with the input by ensuring a predefined format. This
  - Validating  data type
  - Flexible masks
  - Automatic maxlength
- 
+
 ## Installation
 
 VMaskTextField is available through [CocoaPods](http://cocoapods.org). To install
 it, simply add the following line to your Podfile:
 
     pod "VMaskTextField"
+
+or copy VMaskTextField.h and  VMaskTextField.m to your project folder.
+
 
 ## Author
 
