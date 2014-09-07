@@ -6,7 +6,4 @@
 
 #ifdef __OBJC__
 
-  #import <Kiwi/Kiwi.h>
-  #import <FBSnapshotTestCase/FBSnapshotTestCase.h>
-
 #endif

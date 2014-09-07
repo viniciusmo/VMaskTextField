@@ -1,21 +1,15 @@
 PODS:
-  - FBSnapshotTestCase (1.1)
-  - Kiwi (2.3.0)
-  - VMaskTextField (0.0.1)
+  - KIF (3.0.7):
+    - KIF/XCTest
+  - KIF/XCTest (3.0.7)
+  - VMaskTextField (1.0.0)
 
 DEPENDENCIES:
-  - FBSnapshotTestCase
-  - Kiwi
+  - KIF
   - VMaskTextField
-  - VMaskTextField (from `../`)
-
-EXTERNAL SOURCES:
-  VMaskTextField:
-    :path: ../
 
 SPEC CHECKSUMS:
-  FBSnapshotTestCase: 9053afee1d66b4c7c313fcb0ae582a5e47bea9d0
-  Kiwi: 54bece5b35564d9b8e03c608d926f1a22fcfc589
-  VMaskTextField: c7084dc2f3fdb1d1d2f80b3027f3cd5ee238538a
+  KIF: 685ab7b49c1092732b7cb3106cc957366b01e225
+  VMaskTextField: 14d688725782eff8110547e6d451a311aac49530
 
 COCOAPODS: 0.33.1

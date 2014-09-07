@@ -39,6 +39,9 @@
             </BuildableReference>
             <SkippedTests>
                <Test
+                  Identifier = "InitialTests">
+               </Test>
+               <Test
                   Identifier = "InitialTests/MyInitialTests_WillFail_CanDoMaths">
                </Test>
             </SkippedTests>

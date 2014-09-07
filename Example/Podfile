@@ -3,8 +3,6 @@ target 'VMaskTextField', :exclusive => true do
 end
 
 target 'Tests', :exclusive => true do
-  pod "VMaskTextField", :path => "../"
-
-  pod 'Kiwi'
-  pod 'FBSnapshotTestCase'
+  pod "VMaskTextField"
+  pod 'KIF'
 end
