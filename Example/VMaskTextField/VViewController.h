@@ -11,5 +11,9 @@
 
 @interface VViewController : UIViewController<UITextFieldDelegate>
 
+@property (weak,nonatomic) IBOutlet VMaskTextField * maskTextFieldDate;
+@property (weak,nonatomic) IBOutlet VMaskTextField * maskTextFieldHour;
+@property (weak,nonatomic) IBOutlet VMaskTextField * maskTextFieldDateAndHour;
+@property (weak,nonatomic) IBOutlet VMaskTextField * maskTextFieldTelephone;
 
 @end
