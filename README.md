@@ -45,7 +45,7 @@ it, simply add the following line to your Podfile:
 
     pod "VMaskTextField"
 
-or copy VMaskTextField.h and  VMaskTextField.m to your project folder.
+or copy **VMaskTextField.h** and **VMaskTextField.m** to your project folder.
 
 
 ## Author
