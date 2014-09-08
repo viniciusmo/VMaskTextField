@@ -42,9 +42,9 @@ An inputmask helps the user with the input by ensuring a predefined format. This
 
 VMaskTextField is available through [CocoaPods](http://cocoapods.org). To install
 it, simply add the following line to your Podfile:
-
-    pod "VMaskTextField"
-
+```ruby
+pod "VMaskTextField"
+```
 or copy **VMaskTextField.h** and **VMaskTextField.m** to your project folder.
 
 
