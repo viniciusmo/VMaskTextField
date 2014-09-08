@@ -93,20 +93,24 @@ NSString * kVMaskTextFieldDefaultChar = @"#";
     return NO;
 }
 
--(double) rawToDouble{
-    return [_raw doubleValue];
+-(NSString *)raw{
+  return  [[self.text componentsSeparatedByCharactersInSet:[[NSCharacterSet decimalDigitCharacterSet] invertedSet]] componentsJoinedByString:@""];
 }
 
--(float) rawToFloat{
-    return [_raw floatValue];
+-(double) textToDouble{
+    return [self.text doubleValue];
 }
 
--(NSInteger) rawToInteger{
-    return [_raw intValue];
+-(float) textToFloat{
+    return [self.text floatValue];
 }
 
--(NSDate *)rawToDate:(NSDateFormatter *)formatter{
-    NSDate *date = [formatter dateFromString:_raw];
+-(NSInteger) textToInteger{
+    return [self.text intValue];
+}
+
+-(NSDate *)textToDate:(NSDateFormatter *)formatter{
+    NSDate *date = [formatter dateFromString:self.text];
     return date;
 }
 
