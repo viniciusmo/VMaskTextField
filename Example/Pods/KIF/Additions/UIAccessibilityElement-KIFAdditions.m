@@ -54,6 +54,29 @@ MAKE_CATEGORIES_LOADABLE(UIAccessibilityElement_KIFAdditions)
     return YES;
 }
 
++ (BOOL)accessibilityElement:(out UIAccessibilityElement **)foundElement view:(out UIView **)foundView withElementMatchingPredicate:(NSPredicate *)predicate tappable:(BOOL)mustBeTappable error:(out NSError **)error;
+{
+    UIAccessibilityElement *element = [[UIApplication sharedApplication] accessibilityElementMatchingBlock:^BOOL(UIAccessibilityElement *element) {
+        return [predicate evaluateWithObject:element];
+    }];
+    
+    if (!element) {
+        if (error) {
+            *error = [NSError KIFErrorWithFormat:@"Could not find view matching: %@", predicate];
+        }
+        return NO;
+    }
+    
+    UIView *view = [UIAccessibilityElement viewContainingAccessibilityElement:element tappable:mustBeTappable error:error];
+    if (!view) {
+        return NO;
+    }
+    
+    if (foundElement) { *foundElement = element; }
+    if (foundView) { *foundView = view; }
+    return YES;
+}
+
 + (UIAccessibilityElement *)accessibilityElementWithLabel:(NSString *)label value:(NSString *)value traits:(UIAccessibilityTraits)traits error:(out NSError **)error;
 {
     UIAccessibilityElement *element = [[UIApplication sharedApplication] accessibilityElementWithLabel:label accessibilityValue:value traits:traits];
@@ -106,11 +129,17 @@ MAKE_CATEGORIES_LOADABLE(UIAccessibilityElement_KIFAdditions)
         if ([superview isKindOfClass:[UIScrollView class]]) {
             UIScrollView *scrollView = (UIScrollView *)superview;
             
-            if ((UIAccessibilityElement *)view == element) {
+            if (((UIAccessibilityElement *)view == element) && ![view isKindOfClass:[UITableViewCell class]]) {
                 [scrollView scrollViewToVisible:view animated:YES];
             } else {
                 CGRect elementFrame = [view.window convertRect:element.accessibilityFrame toView:scrollView];
-                [scrollView scrollRectToVisible:elementFrame animated:YES];
+                CGRect visibleRect = CGRectMake(scrollView.contentOffset.x, scrollView.contentOffset.y, CGRectGetWidth(scrollView.bounds), CGRectGetHeight(scrollView.bounds));
+                
+                // Only call scrollRectToVisible if the element isn't already visible
+                // iOS 8 will sometimes incorrectly scroll table views so the element scrolls out of view
+                if (!CGRectContainsRect(visibleRect, elementFrame)) {
+                    [scrollView scrollRectToVisible:elementFrame animated:YES];
+                }
             }
             
             // Give the scroll view a small amount of time to perform the scroll.
@@ -128,7 +157,7 @@ MAKE_CATEGORIES_LOADABLE(UIAccessibilityElement_KIFAdditions)
     }
     
     // If we don't require tappability, at least make sure it's not hidden
-    if ([view isHidden]) {
+    if ([view isHidden] || view.alpha == 0.0) {
         if (error) {
             *error = [NSError KIFErrorWithFormat:@"Accessibility element with label \"%@\" is hidden.", element.accessibilityLabel];
         }

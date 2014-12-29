@@ -16,6 +16,8 @@
 
 typedef struct __GSEvent * GSEventRef;
 
+static CGFloat const kTwoFingerConstantWidth = 40;
+
 //
 // GSEvent is an undeclared object. We don't need to use it ourselves but some
 // Apple APIs (UIScrollView in particular) require the x and y fields to be present.
@@ -64,6 +66,39 @@ typedef struct __GSEvent * GSEventRef;
 
 @end
 
+// On iOS 6 the accessibility label may contain line breaks, so when trying to find the
+// element, these line breaks are necessary. But on iOS 7 the system replaces them with
+// spaces. So the same test breaks on either iOS 6 or iOS 7. iOS8 befuddles this again by
+//limiting replacement to spaces in between strings. To work around this replace
+// the line breaks in both and try again.
+NS_INLINE BOOL StringsMatchExceptLineBreaks(NSString *expected, NSString *actual) {
+    if (expected == actual) {
+        return YES;
+    }
+    
+    if (expected.length != actual.length) {
+        return NO;
+    }
+    
+    if ([expected isEqualToString:actual]) {
+        return YES;
+    }
+    
+    if ([expected rangeOfString:@"\n"].location == NSNotFound) {
+        return NO;
+    }
+    
+    for (NSUInteger i = 0; i < expected.length; i ++) {
+        unichar expectedChar = [expected characterAtIndex:i];
+        unichar actualChar = [actual characterAtIndex:i];
+        if (expectedChar != actualChar && !(expectedChar == '\n' && actualChar == ' ')) {
+            return NO;
+        }
+    }
+    
+    return YES;
+}
+
 
 @implementation UIView (KIFAdditions)
 
@@ -107,17 +142,7 @@ typedef struct __GSEvent * GSEventRef;
             accessibilityValue = [(NSAttributedString *)accessibilityValue string];
         }
         
-        BOOL labelsMatch = element.accessibilityLabel == label || [element.accessibilityLabel isEqual:label];
-
-        // On iOS 6 the accessibility label may contain line breaks, so when trying to find the
-        // element, these line breaks are necessary. But on iOS 7 the system replaces them with
-        // spaces. So the same test breaks on either iOS 6 or iOS 7. To work around this replace
-        // the line breaks the same way and try again.
-        if (!labelsMatch) {
-            NSString *modifiedLabel = [label stringByReplacingOccurrencesOfString:@"\n" withString:@" "];
-            labelsMatch = element.accessibilityLabel == modifiedLabel || [element.accessibilityLabel isEqual:modifiedLabel];
-        }
-
+        BOOL labelsMatch = StringsMatchExceptLineBreaks(label, element.accessibilityLabel);
         BOOL traitsMatch = ((element.accessibilityTraits) & traits) == traits;
         BOOL valuesMatch = !value || [value isEqual:accessibilityValue];
 
@@ -423,57 +448,148 @@ typedef struct __GSEvent * GSEventRef;
 
 - (void)dragFromPoint:(CGPoint)startPoint displacement:(KIFDisplacement)displacement steps:(NSUInteger)stepCount;
 {
-    CGPoint *path = alloca(stepCount * sizeof(CGPoint));
-    
-    for (NSUInteger i = 0; i < stepCount; i++)
-    {
-        CGFloat progress = ((CGFloat)i)/(stepCount - 1);
-        path[i] = CGPointMake(startPoint.x + (progress * displacement.x),
-                              startPoint.y + (progress * displacement.y));
-    }
-    
-    [self dragAlongPathWithPoints:path count:stepCount];
+    CGPoint endPoint = CGPointMake(startPoint.x + displacement.x, startPoint.y + displacement.y);
+    NSArray *path = [self pointsFromStartPoint:startPoint toPoint:endPoint steps:stepCount];
+    [self dragPointsAlongPaths:@[path]];
 }
 
 - (void)dragAlongPathWithPoints:(CGPoint *)points count:(NSInteger)count;
 {
-    // we need at least two points in order to make segments
-    if (count < 2) {
+    // convert point array into NSArray with NSValue
+    NSMutableArray *array = [NSMutableArray array];
+    for (int i = 0; i < count; i++)
+    {
+        [array addObject:[NSValue valueWithCGPoint:points[i]]];
+    }
+    [self dragPointsAlongPaths:@[[array copy]]];
+}
+
+- (void)dragPointsAlongPaths:(NSArray *)arrayOfPaths {
+    // must have at least one path, and each path must have the same number of points
+    if (arrayOfPaths.count == 0)
+    {
         return;
     }
 
-    // Create the touch (there should only be one touch object for the whole drag)
-    UITouch *touch = [[UITouch alloc] initAtPoint:points[0] inView:self];
-    [touch setPhaseAndUpdateTimestamp:UITouchPhaseBegan];
-    
-    UIEvent *eventDown = [self eventWithTouch:touch];
-    [[UIApplication sharedApplication] sendEvent:eventDown];
-    
-    CFRunLoopRunInMode(UIApplicationCurrentRunMode, DRAG_TOUCH_DELAY, false);
-
-    for (NSInteger pointIndex = 1; pointIndex < count; pointIndex++) {
-        [touch setLocationInWindow:[self.window convertPoint:points[pointIndex] fromView:self]];
-        [touch setPhaseAndUpdateTimestamp:UITouchPhaseMoved];
-        
-        UIEvent *eventDrag = [self eventWithTouch:touch];
-        [[UIApplication sharedApplication] sendEvent:eventDrag];
-
-        CFRunLoopRunInMode(UIApplicationCurrentRunMode, DRAG_TOUCH_DELAY, false);
+    // all paths must have similar number of points
+    NSUInteger pointsInPath = [arrayOfPaths[0] count];
+    for (NSArray *path in arrayOfPaths)
+    {
+        if (path.count != pointsInPath)
+        {
+            return;
+        }
     }
-    
-    [touch setPhaseAndUpdateTimestamp:UITouchPhaseEnded];
-    
-    UIEvent *eventUp = [self eventWithTouch:touch];
-    [[UIApplication sharedApplication] sendEvent:eventUp];
-    
+
+    NSMutableArray *touches = [NSMutableArray array];
+
+    for (NSUInteger pointIndex = 0; pointIndex < pointsInPath; pointIndex++) {
+        // create initial touch event and send touch down event
+        if (pointIndex == 0)
+        {
+            for (NSArray *path in arrayOfPaths)
+            {
+                CGPoint point = [path[pointIndex] CGPointValue];
+                UITouch *touch = [[UITouch alloc] initAtPoint:point inView:self];
+                [touch setPhaseAndUpdateTimestamp:UITouchPhaseBegan];
+                [touches addObject:touch];
+            }
+            UIEvent *eventDown = [self eventWithTouches:[NSArray arrayWithArray:touches]];
+            [[UIApplication sharedApplication] sendEvent:eventDown];
+        }
+        else
+        {
+            UITouch *touch;
+            for (NSUInteger pathIndex = 0; pathIndex < arrayOfPaths.count; pathIndex++)
+            {
+                NSArray *path = arrayOfPaths[pathIndex];
+                CGPoint point = [path[pointIndex] CGPointValue];
+                touch = touches[pathIndex];
+                [touch setLocationInWindow:[self.window convertPoint:point fromView:self]];
+                [touch setPhaseAndUpdateTimestamp:UITouchPhaseMoved];
+            }
+            UIEvent *event = [self eventWithTouches:[NSArray arrayWithArray:touches]];
+            [[UIApplication sharedApplication] sendEvent:event];
+
+            CFRunLoopRunInMode(UIApplicationCurrentRunMode, DRAG_TOUCH_DELAY, false);
+
+            // The last point needs to also send a phase ended touch.
+            if (pointIndex == pointsInPath - 1) {
+                [touch setPhaseAndUpdateTimestamp:UITouchPhaseEnded];
+                UIEvent *eventUp = [self eventWithTouch:touch];
+                [[UIApplication sharedApplication] sendEvent:eventUp];
+            }
+        }
+    }
+
     // Dispatching the event doesn't actually update the first responder, so fake it
-    if (touch.view == self && [self canBecomeFirstResponder]) {
+    if ([touches[0] view] == self && [self canBecomeFirstResponder]) {
         [self becomeFirstResponder];
     }
-    
+
     while (UIApplicationCurrentRunMode != kCFRunLoopDefaultMode) {
         CFRunLoopRunInMode(UIApplicationCurrentRunMode, 0.1, false);
     }
+}
+
+- (void)twoFingerPanFromPoint:(CGPoint)startPoint toPoint:(CGPoint)toPoint steps:(NSUInteger)stepCount {
+    //estimate the first finger to be diagonally up and left from the center
+    CGPoint finger1Start = CGPointMake(startPoint.x - kTwoFingerConstantWidth,
+                                       startPoint.y - kTwoFingerConstantWidth);
+    CGPoint finger1End = CGPointMake(toPoint.x - kTwoFingerConstantWidth,
+                                     toPoint.y - kTwoFingerConstantWidth);
+    //estimate the second finger to be diagonally down and right from the center
+    CGPoint finger2Start = CGPointMake(startPoint.x + kTwoFingerConstantWidth,
+                                       startPoint.y + kTwoFingerConstantWidth);
+    CGPoint finger2End = CGPointMake(toPoint.x + kTwoFingerConstantWidth,
+                                     toPoint.y + kTwoFingerConstantWidth);
+    NSArray *finger1Path = [self pointsFromStartPoint:finger1Start toPoint:finger1End steps:stepCount];
+    NSArray *finger2Path = [self pointsFromStartPoint:finger2Start toPoint:finger2End steps:stepCount];
+    NSArray *paths = @[finger1Path, finger2Path];
+
+    [self dragPointsAlongPaths:paths];
+}
+
+- (void)pinchAtPoint:(CGPoint)centerPoint distance:(CGFloat)distance steps:(NSUInteger)stepCount {
+    //estimate the first finger to be on the left
+    CGPoint finger1Start = CGPointMake(centerPoint.x - kTwoFingerConstantWidth - distance, centerPoint.y);
+    CGPoint finger1End = CGPointMake(centerPoint.x - kTwoFingerConstantWidth, centerPoint.y);
+    //estimate the second finger to be on the right
+    CGPoint finger2Start = CGPointMake(centerPoint.x + kTwoFingerConstantWidth + distance, centerPoint.y);
+    CGPoint finger2End = CGPointMake(centerPoint.x + kTwoFingerConstantWidth, centerPoint.y);
+    NSArray *finger1Path = [self pointsFromStartPoint:finger1Start toPoint:finger1End steps:stepCount];
+    NSArray *finger2Path = [self pointsFromStartPoint:finger2Start toPoint:finger2End steps:stepCount];
+    NSArray *paths = @[finger1Path, finger2Path];
+
+    [self dragPointsAlongPaths:paths];
+}
+
+- (void)zoomAtPoint:(CGPoint)centerPoint distance:(CGFloat)distance steps:(NSUInteger)stepCount {
+    //estimate the first finger to be on the left
+    CGPoint finger1Start = CGPointMake(centerPoint.x - kTwoFingerConstantWidth, centerPoint.y);
+    CGPoint finger1End = CGPointMake(centerPoint.x - kTwoFingerConstantWidth - distance, centerPoint.y);
+    //estimate the second finger to be on the right
+    CGPoint finger2Start = CGPointMake(centerPoint.x + kTwoFingerConstantWidth, centerPoint.y);
+    CGPoint finger2End = CGPointMake(centerPoint.x + kTwoFingerConstantWidth + distance, centerPoint.y);
+    NSArray *finger1Path = [self pointsFromStartPoint:finger1Start toPoint:finger1End steps:stepCount];
+    NSArray *finger2Path = [self pointsFromStartPoint:finger2Start toPoint:finger2End steps:stepCount];
+    NSArray *paths = @[finger1Path, finger2Path];
+
+    [self dragPointsAlongPaths:paths];
+}
+
+- (NSArray *)pointsFromStartPoint:(CGPoint)startPoint toPoint:(CGPoint)toPoint steps:(NSUInteger)stepCount {
+
+    CGPoint displacement = CGPointMake(toPoint.x - startPoint.x, toPoint.y - startPoint.y);
+    NSMutableArray *points = [NSMutableArray array];
+
+    for (NSUInteger i = 0; i < stepCount; i++) {
+        CGFloat progress = ((CGFloat)i)/(stepCount - 1);
+        CGPoint point = CGPointMake(startPoint.x + (progress * displacement.x),
+                                    startPoint.y + (progress * displacement.y));
+        [points addObject:[NSValue valueWithCGPoint:point]];
+    }
+    return [NSArray arrayWithArray:points];
 }
 
 - (BOOL)isProbablyTappable
@@ -581,10 +697,12 @@ typedef struct __GSEvent * GSEventRef;
     return CGPointMake(NAN, NAN);
 }
 
-- (UIEvent *)eventWithTouch:(UITouch *)touch;
+- (UIEvent *)eventWithTouches:(NSArray *)touches
 {
+    // _touchesEvent is a private selector, interface is exposed in UIApplication(KIFAdditionsPrivate)
     UIEvent *event = [[UIApplication sharedApplication] _touchesEvent];
     
+    UITouch *touch = touches[0];
     CGPoint location = [touch locationInView:touch.window];
     KIFEventProxy *eventProxy = [[KIFEventProxy alloc] init];
     eventProxy->x1 = location.x;
@@ -600,9 +718,17 @@ typedef struct __GSEvent * GSEventRef;
 
     [event _clearTouches];
     [event _setGSEvent:(struct __GSEvent *)eventProxy];
-    [event _addTouch:touch forDelayedDelivery:NO];
-    
+
+    for (UITouch *aTouch in touches) {
+        [event _addTouch:aTouch forDelayedDelivery:NO];
+    }
+
     return event;
+}
+
+- (UIEvent *)eventWithTouch:(UITouch *)touch;
+{
+    return [self eventWithTouches:@[touch]];
 }
 
 - (BOOL)isUserInteractionActuallyEnabled;
@@ -654,6 +780,51 @@ typedef struct __GSEvent * GSEventRef;
     }
     
     return nil;
+}
+
+- (BOOL)isVisibleInViewHierarchy
+{
+    __block BOOL result = YES;
+    [self performBlockOnAscendentViews:^(UIView *view, BOOL *stop) {
+        if (view.isHidden) {
+            result = NO;
+            if (stop != NULL) {
+                *stop = YES;
+            }
+        }
+    }];
+    return result;
+}
+
+- (void)performBlockOnDescendentViews:(void (^)(UIView *view, BOOL *stop))block
+{
+    BOOL stop = NO;
+    [self performBlockOnDescendentViews:block stop:&stop];
+}
+
+- (void)performBlockOnDescendentViews:(void (^)(UIView *view, BOOL *stop))block stop:(BOOL *)stop
+{
+    block(self, stop);
+    if (*stop) {
+        return;
+    }
+    
+    for (UIView *view in self.subviews) {
+        [view performBlockOnDescendentViews:block stop:stop];
+        if (*stop) {
+            return;
+        }
+    }
+}
+
+- (void)performBlockOnAscendentViews:(void (^)(UIView *view, BOOL *stop))block
+{
+    BOOL stop = NO;
+    UIView *checkedView = self;
+    while(checkedView && stop == NO) {
+        block(checkedView, &stop);
+        checkedView = checkedView.superview;
+    }
 }
 
 @end
