@@ -50,7 +50,7 @@ NSString * kVMaskTextFieldDefaultChar = @"#";
             if (currentCharMask == '#') {
                 break;
             }
-            if (isnumber(currentChar)) {
+            if (isnumber(currentChar) && currentCharMask!= currentChar) {
                 needAppend = YES;
             }
             [returnText appendString:[NSString stringWithFormat:@"%c",currentCharMask]];
