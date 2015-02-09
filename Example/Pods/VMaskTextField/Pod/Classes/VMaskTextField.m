@@ -22,6 +22,16 @@ NSString * kVMaskTextFieldDefaultChar = @"#";
     return self;
 }
 
+-(void) setTextWithMask:(NSString *) text{
+    NSAssert(_mask!=nil, @"Mask is nil.");
+    for (int i = 0; i < text.length; i++) {
+        if (self.text.length == _mask.length) {
+            break;
+        }
+        [self shouldChangeCharactersInRange:NSMakeRange(i, 0) replacementString:[NSString stringWithFormat:@"%c",[text characterAtIndex:i]]];
+    }
+}
+
 - (BOOL)shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
     NSString * currentTextDigited = [self.text stringByReplacingCharactersInRange:range withString:string];
     if (string.length == 0) {

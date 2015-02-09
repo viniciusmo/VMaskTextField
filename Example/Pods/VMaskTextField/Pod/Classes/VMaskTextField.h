@@ -12,5 +12,6 @@
 -(NSDate *)rawToDate:(NSDateFormatter *)formatter;
 
 - (BOOL)shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string;
+-(void) setTextWithMask:(NSString *) text;
 
 @end
