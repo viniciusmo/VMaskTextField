@@ -2,6 +2,7 @@
 
 @interface VMaskTextField : UITextField
 
+@property (nonatomic,assign) BOOL disallowEditionBetweenCharacters;
 @property (nonatomic,strong) NSString * mask;
 @property (nonatomic,strong) NSString * raw;
 @property (nonatomic,strong) NSString * defaultCharMask;
