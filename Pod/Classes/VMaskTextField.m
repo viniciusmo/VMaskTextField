@@ -23,6 +23,10 @@ NSString * kVMaskTextFieldDefaultChar = @"#";
 }
 
 - (BOOL)shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
+    if (!_mask) {
+        return YES;
+    }
+    
     if (self.disallowEditingBetweenCharacters) {
         NSInteger minimanAllowedLocation = self.text.length - 1;
         NSInteger editionLocation = range.location;
