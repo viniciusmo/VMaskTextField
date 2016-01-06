@@ -1,15 +1,19 @@
 PODS:
   - KIF (3.1.0):
-    - KIF/XCTest
+    - KIF/XCTest (= 3.1.0)
   - KIF/XCTest (3.1.0)
-  - VMaskTextField (1.0.1)
+  - VMaskTextField (1.0.6)
 
 DEPENDENCIES:
   - KIF
-  - VMaskTextField
+  - VMaskTextField (from `../`)
+
+EXTERNAL SOURCES:
+  VMaskTextField:
+    :path: ../
 
 SPEC CHECKSUMS:
-  KIF: de7c7f4aea08179c65d963a3c5ec438ee6408e8c
-  VMaskTextField: 37f5d45bef1903db937eb587e9a06cf464373029
+  KIF: 74d5df6a4407f91e22a3051f8d11da37a081c12e
+  VMaskTextField: 3107742b554599925c5fa7649fb4209662426e13
 
-COCOAPODS: 0.34.4
+COCOAPODS: 0.39.0

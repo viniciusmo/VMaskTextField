@@ -1,4 +1,5 @@
 #import "VMaskTextField.h"
+#import "VMaskEditor.h"
 
 NSString * kVMaskTextFieldDefaultChar = @"#";
 
@@ -22,6 +23,16 @@ NSString * kVMaskTextFieldDefaultChar = @"#";
     return self;
 }
 
+-(void) setTextWithMask:(NSString *) text{
+    NSAssert(_mask!=nil, @"Mask is nil.");
+    for (int i = 0; i < text.length; i++) {
+        if (self.text.length == _mask.length) {
+            break;
+        }
+        [self shouldChangeCharactersInRange:NSMakeRange(i, 0) replacementString:[NSString stringWithFormat:@"%c",[text characterAtIndex:i]]];
+    }
+}
+
 - (BOOL)shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
     if (self.disallowEditingBetweenCharacters) {
         NSInteger minimanAllowedLocation = self.text.length - 1;
@@ -32,56 +43,7 @@ NSString * kVMaskTextFieldDefaultChar = @"#";
             return NO;
         }
     }
-    
-    NSString * currentTextDigited = [self.text stringByReplacingCharactersInRange:range withString:string];
-    if (string.length == 0) {
-        unichar lastCharDeleted = 0;
-        while (currentTextDigited.length > 0 && !isnumber([currentTextDigited characterAtIndex:currentTextDigited.length-1])) {
-            lastCharDeleted = [currentTextDigited characterAtIndex:[currentTextDigited length] - 1];
-            currentTextDigited = [currentTextDigited substringToIndex:[currentTextDigited length] - 1];
-        }
-        self.text = currentTextDigited;
-        return NO;
-    }
-    
-    NSMutableString * returnText = [[NSMutableString alloc] init];
-    if (currentTextDigited.length > _mask.length) {
-        return NO;
-    }
-    
-    int last = 0;
-    BOOL needAppend = NO;
-    for (int i = 0; i < currentTextDigited.length; i++) {
-        unichar  currentCharMask = [_mask characterAtIndex:i];
-        unichar  currentChar = [currentTextDigited characterAtIndex:i];
-        if (isnumber(currentChar) && currentCharMask == '#') {
-            [returnText appendString:[NSString stringWithFormat:@"%c",currentChar]];
-        }else{
-            if (currentCharMask == '#') {
-                break;
-            }
-            if (isnumber(currentChar) && currentChar != currentCharMask) {
-                needAppend = YES;
-            }
-            [returnText appendString:[NSString stringWithFormat:@"%c",currentCharMask]];
-        }
-        last = i;
-    }
-    
-    for (int i = last+1; i < _mask.length; i++) {
-        unichar currentCharMask = [_mask characterAtIndex:i];
-        if (currentCharMask != '#') {
-            [returnText appendString:[NSString stringWithFormat:@"%c",currentCharMask]];
-        }
-        if (currentCharMask == '#') {
-            break;
-        }
-    }
-    if (needAppend) {
-        [returnText appendString:string];
-    }
-    self.text = returnText;
-    return NO;
+    return [VMaskEditor shouldChangeCharactersInRange:range replacementString:string textField:self mask:_mask];
 }
 
 -(double) rawToDouble{

@@ -2,4 +2,4 @@
 #import <UIKit/UIKit.h>
 #endif
 
-#import "Pods-VMaskTextField-environment.h"
+#import <CoreGraphics/CoreGraphics.h>
