@@ -11,8 +11,7 @@
 -(float) rawToFloat;
 -(NSInteger) rawToInteger;
 -(NSDate *)rawToDate:(NSDateFormatter *)formatter;
-
-- (BOOL)shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string;
+-(BOOL)shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string;
 -(void) setTextWithMask:(NSString *) text;
 
 @end

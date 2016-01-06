@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "VMaskTextField"
-  s.version          = "1.0.4"
+  s.version          = "1.0.6"
   s.summary          = "VMaskTextField is a library which create an input mask."
   s.description      = <<-DESC
                        An inputmask helps the user with the input by ensuring a predefined format. This can be useful for dates, numerics, phone numbers etc
@@ -19,7 +19,7 @@ Pod::Spec.new do |s|
     'VMaskTextField' => ['Pod/Assets/*.png']
   }
 
-  # s.public_header_files = 'Pod/Classes/**/*.h'
+  s.public_header_files = 'Pod/Classes/**/*.h'
   # s.frameworks = 'UIKit', 'MapKit'
   # s.dependency 'AFNetworking', '~> 2.3'
 end
