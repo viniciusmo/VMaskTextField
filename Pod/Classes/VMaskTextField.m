@@ -29,7 +29,7 @@ NSString * kVMaskTextFieldDefaultChar = @"#";
         if (self.text.length == _mask.length) {
             break;
         }
-        [self shouldChangeCharactersInRange:NSMakeRange(i, 0) replacementString:[NSString stringWithFormat:@"%c",[text characterAtIndex:i]]];
+        [self shouldChangeCharactersInRange:NSMakeRange(self.text.length, 0) replacementString:[NSString stringWithFormat:@"%c",[text characterAtIndex:i]]];
     }
 }
 
