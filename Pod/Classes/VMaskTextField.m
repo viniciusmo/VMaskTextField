@@ -46,6 +46,18 @@ NSString * kVMaskTextFieldDefaultChar = @"#";
     return [VMaskEditor shouldChangeCharactersInRange:range replacementString:string textField:self mask:_mask];
 }
 
+-(NSString *)raw{
+    NSMutableString *string = [NSMutableString new];
+    for (int i=0; i<self.text.length; i++) {
+        unichar charMask = [self.mask characterAtIndex:i];
+        unichar charText = [self.text characterAtIndex:i];
+        if (charMask == '#') {
+            [string appendFormat:@"%c", charText];
+        }
+    }
+    return string;
+}
+
 -(double) rawToDouble{
     return [_raw doubleValue];
 }
