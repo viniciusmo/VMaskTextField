@@ -25,6 +25,7 @@ NSString * kVMaskTextFieldDefaultChar = @"#";
 
 -(void) setTextWithMask:(NSString *) text{
     NSAssert(_mask!=nil, @"Mask is nil.");
+    self.text = @"";
     for (int i = 0; i < text.length; i++) {
         if (self.text.length == _mask.length) {
             break;
