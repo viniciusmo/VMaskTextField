@@ -23,6 +23,7 @@
             currentTextDigited = [currentTextDigited substringToIndex:[currentTextDigited length] - 1];
         }
         textField.text = currentTextDigited;
+        [textField sendActionsForControlEvents:UIControlEventEditingChanged];
         return NO;
     }
     
@@ -63,6 +64,7 @@
         [returnText appendString:string];
     }
     textField.text = returnText;
+    [textField sendActionsForControlEvents:UIControlEventEditingChanged];
     return NO;
 }
 
