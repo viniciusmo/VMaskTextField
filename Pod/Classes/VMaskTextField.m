@@ -57,15 +57,8 @@ NSString * kVMaskTextFieldDefaultChar = @"#";
 }
 
 -(NSString *)raw{
-    NSMutableString *string = [NSMutableString new];
-    for (int i=0; i<self.text.length; i++) {
-        unichar charMask = [self.mask characterAtIndex:i];
-        unichar charText = [self.text characterAtIndex:i];
-        if (charMask == '#') {
-            [string appendFormat:@"%c", charText];
-        }
-    }
-    return string;
+    NSCharacterSet *charsToRemove = [NSCharacterSet characterSetWithCharactersInString:self.mask];
+    return [[self.text componentsSeparatedByCharactersInSet: charsToRemove] componentsJoinedByString: @""];
 }
 
 -(double) rawToDouble{
