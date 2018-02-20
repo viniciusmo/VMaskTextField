@@ -25,11 +25,21 @@ NSString * kVMaskTextFieldDefaultChar = @"#";
 
 -(void) setTextWithMask:(NSString *) text{
     NSAssert(_mask!=nil, @"Mask is nil.");
+    int currentStartRange = 0;
     for (int i = 0; i < text.length; i++) {
+        currentStartRange = i;
         if (self.text.length == _mask.length) {
             break;
         }
-        [self shouldChangeCharactersInRange:NSMakeRange(self.text.length, 0) replacementString:[NSString stringWithFormat:@"%c",[text characterAtIndex:i]]];
+        
+        //fix bug reported on https://github.com/viniciusmo/VMaskTextField/issues/20
+        NSString *strToGetCharacterInMask = [_mask substringWithRange:NSMakeRange(0, i)];
+        NSString *strWithCharacterInMask = [strToGetCharacterInMask stringByReplacingOccurrencesOfString:@"#" withString:@""];
+        int totalOfCharacterInMask = [strWithCharacterInMask length];
+        int totalOfRangeToAdd = [[[_mask substringWithRange:NSMakeRange(0, i+totalOfCharacterInMask)] stringByReplacingOccurrencesOfString:@"#" withString:@""] length];
+        currentStartRange += totalOfRangeToAdd;
+        
+        [self shouldChangeCharactersInRange:NSMakeRange(currentStartRange, 0) replacementString:[NSString stringWithFormat:@"%c",[text characterAtIndex:i]]];
     }
 }
 
@@ -47,15 +57,8 @@ NSString * kVMaskTextFieldDefaultChar = @"#";
 }
 
 -(NSString *)raw{
-    NSMutableString *string = [NSMutableString new];
-    for (int i=0; i<self.text.length; i++) {
-        unichar charMask = [self.mask characterAtIndex:i];
-        unichar charText = [self.text characterAtIndex:i];
-        if (charMask == '#') {
-            [string appendFormat:@"%c", charText];
-        }
-    }
-    return string;
+    NSCharacterSet *charsToRemove = [NSCharacterSet characterSetWithCharactersInString:self.mask];
+    return [[self.text componentsSeparatedByCharactersInSet: charsToRemove] componentsJoinedByString: @""];
 }
 
 -(double) rawToDouble{
